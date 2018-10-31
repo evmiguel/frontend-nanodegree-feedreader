@@ -50,19 +50,36 @@ $(function() {
     });
 
 
-    /* TODO: Write a new test suite named "The menu" */
+    /* This test suite is all about the menu */
+    describe("The menu", function(){
 
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
+        /*
+         * Ensure the menu element is hidden by default.
          */
+         it('is hidden by default', function(){
+            expect(document.body.classList.contains('menu-hidden')).toBe(true)
+         })
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
+         /*
+          * Ensures the menu changes visibility when the menu icon is clicked.
           */
+          it('is visible after the menu icon is clicked', function(){
+            // Simulate a click event on the menu icon using jasmine-jquery library
+            // Click to display the menu
+            spyOnEvent($('.menu-icon-link'), 'click')
+            $('.menu-icon-link').click()
+            expect('click').toHaveBeenTriggeredOn($('.menu-icon-link'))
+            expect(document.body.classList.contains('menu-hidden')).toBe(false)
+
+            // Return the menu back to hidden
+            $('.menu-icon-link').click()
+            expect('click').toHaveBeenTriggeredOn($('.menu-icon-link'))
+            expect(document.body.classList.contains('menu-hidden')).toBe(true)
+          })
+
+
+    })
+
 
     /* TODO: Write a new test suite named "Initial Entries" */
 

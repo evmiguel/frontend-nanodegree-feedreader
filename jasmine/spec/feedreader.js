@@ -103,10 +103,40 @@ $(function() {
          })
     })
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
-
-        /* TODO: Write a test that ensures when a new feed is loaded
+    /* This test suite is all about new feed selection */
+    describe('New Feed Selection', function() {
+        /*
+         * Ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
          */
+         let firstFeed, secondFeed
+
+         beforeEach(function(done){
+            // load the first feed
+            loadFeed(0, function(){
+                // get the first feed loaded
+                firstFeed = $('.feed').children()
+            })
+
+            // load the second feed
+            loadFeed(1, function(){
+                secondFeed = $('.feed').children()
+            })
+
+            // return to the first feed
+            loadFeed(0, function(done) {
+                done()
+            })
+         })
+
+         it('changes content when a new feed is loaded', function(done){
+            // make sure that the feeds produce different content by comparing
+            // each entry's titles (via inner HTML)
+            for (let i=0; i<firstFeed.length; i++){
+                expect(firstFeed[i].innerHTML === secondFeed[i].innerHTML).toBe(false)
+            }
+
+            done()
+         })
+    })
 }());

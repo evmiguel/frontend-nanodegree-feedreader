@@ -33,6 +33,7 @@ $(function() {
             for (let feed of allFeeds) {
                 expect(feed.hasOwnProperty('url')).toBe(true)
                 expect(feed.url).toBeDefined()
+                expect(feed.url).not.toBe('')
             }
          })
 
@@ -95,10 +96,12 @@ $(function() {
          * there is at least a single .entry element within the .feed container.
          */
          it('has at least one entry element in a feed', function(done) {
-            let feedItems = $('.feed').children()
-            let firstEntry = feedItems[0].getElementsByClassName('entry')[0]
+            let feedItems = $('.feed .entry')
+            // check for more than one item
             expect(feedItems.length > 0).toBe(true)
-            expect(firstEntry).toBeDefined()
+
+            // check that the first item is defined
+            expect(feedItems[0]).toBeDefined()
             done()
          })
     })
@@ -111,23 +114,23 @@ $(function() {
          */
          let firstFeed, secondFeed
 
-         beforeEach(function(done){
-            // load the first feed
-            loadFeed(0, function(){
-                // get the first feed loaded
+         // Compare initial feed load to another feed lopad
+         beforeEach((done)=> {
+            // Load the initial page feed
+            loadFeed(0, function() {
                 firstFeed = $('.feed').children()
-            })
+                // Simulate loading a different feed
+                loadFeed(1, function() {
+                    secondFeed = $('.feed').children()
+                    done()
+                });
+            });
+        });
 
-            // load the second feed
-            loadFeed(1, function(){
-                secondFeed = $('.feed').children()
-            })
-
-            // return to the first feed
-            loadFeed(0, function(done) {
-                done()
-            })
-         })
+        afterEach(() => {
+            // Return page to original feed
+            loadFeed(0)
+        })
 
          it('changes content when a new feed is loaded', function(done){
             // make sure that the feeds produce different content by comparing
